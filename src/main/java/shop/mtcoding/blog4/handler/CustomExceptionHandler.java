@@ -15,7 +15,7 @@ public class CustomExceptionHandler {
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<?> customException(CustomException e) {
         if (e.getStatus() == HttpStatus.UNAUTHORIZED) {
-            return new ResponseEntity<>(Script.href(e.getMessage(), e.getLocation()), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(Script.href(e.getMessage(), "/loginForm"), HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<>(Script.back(e.getMessage()), e.getStatus());
     }
