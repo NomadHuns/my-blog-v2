@@ -27,14 +27,19 @@ public class UserService {
         }
     }
 
+    public User login(LoginReqDto loginReqDto) {
+        User principalPS = userRepository.findByUsernameAndPassword(loginReqDto.getUsername(),
+                loginReqDto.getPassword());
+        if (principalPS == null) {
+            throw new CustomException("유저네임이나 패스워드를 확인해 주세요");
+        }
+        return principalPS;
+    }
+    
     private void checkAlreadyHasSameUsername(String username) {
         User principalPS = userRepository.findByUsername(username);
         if (principalPS != null) {
             throw new CustomException("존재하는 유저네임입니다.");
         }
-    }
-
-    public User login(LoginReqDto loginReqDto) {
-        return null;
     }
 }
