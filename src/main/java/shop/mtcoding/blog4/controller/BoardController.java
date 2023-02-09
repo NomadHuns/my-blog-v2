@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import lombok.RequiredArgsConstructor;
 import shop.mtcoding.blog4.dto.board.BoardReq.SaveReqDto;
+import shop.mtcoding.blog4.dto.board.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.blog4.dto.board.BoardResp.BoardListRespDto;
 import shop.mtcoding.blog4.ex.CustomException;
 import shop.mtcoding.blog4.model.User;
@@ -23,6 +24,7 @@ import shop.mtcoding.blog4.service.BoardService;
 public class BoardController {
     private final BoardService boardService;
     private final HttpSession session;
+
     @GetMapping({ "/", "/board", "/main" })
     public String main(Model model) {
         List<BoardListRespDto> boardList = boardService.getBoardList();
@@ -31,7 +33,9 @@ public class BoardController {
     }
 
     @GetMapping("/board/{id}")
-    public String detail(@PathVariable("id") int id) {
+    public String detail(@PathVariable("id") int id, Model model) {
+        BoardDetailRespDto board = boardService.getBoardDetail(id);
+        model.addAttribute("board", board);
         return "board/detail";
     }
 
@@ -60,10 +64,10 @@ public class BoardController {
         }
     }
 
-    private User authenticatePrincipal(){
+    private User authenticatePrincipal() {
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
-            throw new CustomException("해당 기능은 로그인이 필요합니다.",HttpStatus.UNAUTHORIZED);
+            throw new CustomException("해당 기능은 로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
         }
         return principal;
     }
