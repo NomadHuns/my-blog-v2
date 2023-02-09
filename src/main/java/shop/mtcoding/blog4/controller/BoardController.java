@@ -79,7 +79,7 @@ public class BoardController {
         User principal = authenticatePrincipal();
         validateStringApi(updateReqDto.getTitle(), "제목을 입력하세요");
         validateStringApi(updateReqDto.getContent(), "내용을 입력하세요");
-        boardService.update();
+        boardService.update(id, principal.getId(), updateReqDto);
         return new ResponseDto<>(1, "게시물 수정 성공", null);
     }
 

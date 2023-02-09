@@ -18,7 +18,7 @@ public interface BoardRepository {
 
         public int deleteById(int id);
 
-        public int updateById(@Param("id") int id, @Param("title") String title, @Param("title") String content,
+        public int updateById(@Param("id") int id, @Param("title") String title, @Param("content") String content,
                         @Param("userId") int userId);
 
         public List<BoardListRespDto> findAllWithUser();
