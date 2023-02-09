@@ -25,6 +25,7 @@ import shop.mtcoding.blog4.ex.CustomApiException;
 import shop.mtcoding.blog4.ex.CustomException;
 import shop.mtcoding.blog4.model.User;
 import shop.mtcoding.blog4.service.BoardService;
+import shop.mtcoding.blog4.util.Verify;
 
 @Controller
 @RequiredArgsConstructor
@@ -61,8 +62,8 @@ public class BoardController {
     @PostMapping("/board")
     public String save(SaveReqDto saveReqDto) {
         User principal = authenticatePrincipal();
-        validateString(saveReqDto.getTitle(), "제목을 입력하세요");
-        validateString(saveReqDto.getContent(), "내용을 입력하세요");
+        Verify.validateString(saveReqDto.getTitle(), "제목을 입력하세요");
+        Verify.validateString(saveReqDto.getContent(), "내용을 입력하세요");
         boardService.save(saveReqDto, principal.getId());
         return "redirect:/";
     }
@@ -77,16 +78,10 @@ public class BoardController {
     @PutMapping("/board/{id}")
     public @ResponseBody ResponseDto<?> update(@PathVariable("id") int id, @RequestBody UpdateReqDto updateReqDto) {
         User principal = authenticatePrincipal();
-        validateStringApi(updateReqDto.getTitle(), "제목을 입력하세요");
-        validateStringApi(updateReqDto.getContent(), "내용을 입력하세요");
+        Verify.validateStringApi(updateReqDto.getTitle(), "제목을 입력하세요");
+        Verify.validateStringApi(updateReqDto.getContent(), "내용을 입력하세요");
         boardService.update(id, principal.getId(), updateReqDto);
         return new ResponseDto<>(1, "게시물 수정 성공", null);
-    }
-
-    private void validateStringApi(String stringData, String msg) {
-        if (stringData.isEmpty() || stringData == null) {
-            throw new CustomApiException(msg);
-        }
     }
 
     private User authenticatePrincipalApi() {
@@ -95,12 +90,6 @@ public class BoardController {
             throw new CustomApiException("해당 기능은 로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
         }
         return principal;
-    }
-
-    private void validateString(String stringData, String msg) {
-        if (stringData.isEmpty() || stringData == null) {
-            throw new CustomException(msg);
-        }
     }
 
     private User authenticatePrincipal() {
