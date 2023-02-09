@@ -45,4 +45,25 @@ public class UserControllerTest {
         resultActions.andExpect(status().is3xxRedirection());
     }
 
+    @Test
+    public void login_test() throws Exception {
+        // given
+        String usernameVal = "ssar";
+        String passwordVal = "1234";
+        StringBuffer sb = new StringBuffer();
+        sb.append("username=");
+        sb.append(usernameVal);
+        sb.append("&password=");
+        sb.append(passwordVal);
+        String requestBody = sb.toString();
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/login")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE));
+
+        // verify
+        resultActions.andExpect(status().is3xxRedirection());
+    }
+
 }

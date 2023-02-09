@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.mtcoding.blog4.dto.user.UserReq.JoinReqDto;
+import shop.mtcoding.blog4.dto.user.UserReq.LoginReqDto;
 import shop.mtcoding.blog4.ex.CustomException;
 import shop.mtcoding.blog4.model.User;
 import shop.mtcoding.blog4.model.UserRepository;
@@ -31,5 +32,9 @@ public class UserService {
         if (principalPS != null) {
             throw new CustomException("존재하는 유저네임입니다.");
         }
+    }
+
+    public User login(LoginReqDto loginReqDto) {
+        return null;
     }
 }
