@@ -34,7 +34,7 @@ public class BoardService {
     public void delete(int id, int principalId) {
         Board boardPS = boardRepository.findById(id);
         checkObjectExistApi(boardPS, "해당 게시물을 찾을 수 없습니다.");
-        checkAuthorityApi(boardPS.getUserId(), principalId, "글쓰기 실패");
+        checkAuthorityApi(boardPS.getUserId(), principalId, "권한이 없습니다");
         try {
             boardRepository.deleteById(id);
         } catch (Exception e) {
