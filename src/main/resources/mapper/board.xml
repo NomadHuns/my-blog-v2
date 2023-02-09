@@ -19,4 +19,10 @@
    <update id="updateById">
       update board_tb set title = #{title}, content = #{content}, user_id = #{userId} where id = #{id}
    </update>
+   <select id="findAllWithUser" resultType="shop.mtcoding.blog4.dto.board.BoardResp$BoardListRespDto">
+      select bt.id, bt.title, ut.username
+      from board_tb bt
+      inner join user_tb ut
+      on bt.user_id = ut.id
+   </select>
 </mapper>
