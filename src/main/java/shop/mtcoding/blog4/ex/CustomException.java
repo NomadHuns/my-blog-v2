@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class CustomException extends RuntimeException {
     private HttpStatus status;
-    private String location;
+    private String location = "/loginForm";
 
     public CustomException(String msg, HttpStatus status) {
         super(msg);
