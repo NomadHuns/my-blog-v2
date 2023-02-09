@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.mtcoding.blog4.dto.user.UserReq.JoinReqDto;
+import shop.mtcoding.blog4.dto.user.UserReq.LoginReqDto;
 import shop.mtcoding.blog4.ex.CustomException;
 import shop.mtcoding.blog4.model.User;
 import shop.mtcoding.blog4.model.UserRepository;
@@ -26,6 +27,15 @@ public class UserService {
         }
     }
 
+    public User login(LoginReqDto loginReqDto) {
+        User principalPS = userRepository.findByUsernameAndPassword(loginReqDto.getUsername(),
+                loginReqDto.getPassword());
+        if (principalPS == null) {
+            throw new CustomException("유저네임이나 패스워드를 확인해 주세요");
+        }
+        return principalPS;
+    }
+    
     private void checkAlreadyHasSameUsername(String username) {
         User principalPS = userRepository.findByUsername(username);
         if (principalPS != null) {
