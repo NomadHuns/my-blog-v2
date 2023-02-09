@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-    <title>Bootstrap Example</title>
+    <title>My Blog</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -27,12 +27,17 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between" id="collapsibleNavbar">
                 <ul class="navbar-nav">
+                <c:choose>
+                   <c:when test="${principal == null}">
                     <li class="nav-item">
                         <a class="nav-link" href="/loginForm">로그인</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/joinForm">회원가입</a>
                     </li>
+                   </c:when>
+                
+                   <c:otherwise>
                     <li class="nav-item">
                         <a class="nav-link" href="/board/writeForm">글쓰기</a>
                     </li>
@@ -42,6 +47,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">로그아웃</a>
                     </li>
+                   </c:otherwise>
+                </c:choose>
                 </ul>
                 <div>
                     <a href="/user/profileUpdate"><img src="/images/profile.jfif" style="width: 35px;"
