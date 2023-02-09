@@ -2,6 +2,10 @@ package shop.mtcoding.blog4.service;
 
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +28,9 @@ public class BoardService {
 
     @Transactional
     public void save(SaveReqDto saveReqDto, int principalId) {
+        String thumbnail = parseAttrVal(saveReqDto.getContent(), "img", "src", "/images/newjeans.jpg");
         try {
-            boardRepository.insert(saveReqDto.getTitle(), saveReqDto.getContent(), principalId);
+            boardRepository.insert(saveReqDto.getTitle(), saveReqDto.getContent(), thumbnail, principalId);
         } catch (Exception e) {
             throw new CustomException("글쓰기 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -45,11 +50,13 @@ public class BoardService {
 
     @Transactional
     public void update(int boardId, int principalId, UpdateReqDto updateReqDto) {
+        String thumbnail = parseAttrVal(updateReqDto.getContent(), "img", "src", "/images/newjeans.jpg");
+
         Board boardPS = boardRepository.findById(boardId);
         checkObjectExistApi(boardPS, "해당 게시물을 찾을 수 없습니다.");
         checkAuthorityApi(boardPS.getUserId(), principalId, "권한이 없습니다");
         try {
-            boardRepository.updateById(boardPS.getId(), updateReqDto.getTitle(), updateReqDto.getContent(),
+            boardRepository.updateById(boardPS.getId(), updateReqDto.getTitle(), updateReqDto.getContent(), thumbnail,
                     principalId);
         } catch (Exception e) {
             throw new CustomApiException("글 수정 실패", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -85,4 +92,16 @@ public class BoardService {
         }
     }
 
+    private String parseAttrVal(String html, String tag, String attr, String defaultVal) {
+        String result = "";
+        Document doc = Jsoup.parse(html);
+        Elements elements = doc.select(tag);
+        Element el = elements.first();
+        if (el == null) {
+            result = defaultVal;
+        } else {
+            result = el.attr(attr);
+        }
+        return result;
+    }
 }
