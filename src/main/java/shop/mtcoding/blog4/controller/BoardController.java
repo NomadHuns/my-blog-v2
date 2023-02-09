@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
 import shop.mtcoding.blog4.dto.ResponseDto;
 import shop.mtcoding.blog4.dto.board.BoardReq.SaveReqDto;
+import shop.mtcoding.blog4.dto.board.BoardReq.UpdateReqDto;
 import shop.mtcoding.blog4.dto.board.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.blog4.dto.board.BoardResp.BoardListRespDto;
 import shop.mtcoding.blog4.ex.CustomApiException;
@@ -49,7 +52,9 @@ public class BoardController {
     }
 
     @GetMapping("/board/{id}/updateForm")
-    public String updateForm() {
+    public String updateForm(@PathVariable("id") int id, Model model) {
+        BoardDetailRespDto board = boardService.getBoardDetail(id);
+        model.addAttribute("board", board);
         return "board/updateForm";
     }
 
@@ -67,6 +72,21 @@ public class BoardController {
         User principal = authenticatePrincipalApi();
         boardService.delete(id, principal.getId());
         return new ResponseDto<>(1, "게시물 삭제 성공", null);
+    }
+
+    @PutMapping("/board/{id}")
+    public @ResponseBody ResponseDto<?> update(@PathVariable("id") int id, @RequestBody UpdateReqDto updateReqDto) {
+        User principal = authenticatePrincipal();
+        validateStringApi(updateReqDto.getTitle(), "제목을 입력하세요");
+        validateStringApi(updateReqDto.getContent(), "내용을 입력하세요");
+        boardService.update(id, principal.getId(), updateReqDto);
+        return new ResponseDto<>(1, "게시물 수정 성공", null);
+    }
+
+    private void validateStringApi(String stringData, String msg) {
+        if (stringData.isEmpty() || stringData == null) {
+            throw new CustomApiException(msg);
+        }
     }
 
     private User authenticatePrincipalApi() {

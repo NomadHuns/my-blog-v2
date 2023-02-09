@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.mtcoding.blog4.dto.board.BoardReq.SaveReqDto;
+import shop.mtcoding.blog4.dto.board.BoardReq.UpdateReqDto;
 import shop.mtcoding.blog4.dto.board.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.blog4.dto.board.BoardResp.BoardListRespDto;
 import shop.mtcoding.blog4.ex.CustomApiException;
@@ -42,6 +43,19 @@ public class BoardService {
         }
     }
 
+    @Transactional
+    public void update(int boardId, int principalId, UpdateReqDto updateReqDto) {
+        Board boardPS = boardRepository.findById(boardId);
+        checkObjectExistApi(boardPS, "해당 게시물을 찾을 수 없습니다.");
+        checkAuthorityApi(boardPS.getUserId(), principalId, "권한이 없습니다");
+        try {
+            boardRepository.updateById(boardPS.getId(), updateReqDto.getTitle(), updateReqDto.getContent(),
+                    principalId);
+        } catch (Exception e) {
+            throw new CustomApiException("글 수정 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     private void checkAuthorityApi(int BoardUserId, int principalId, String msg) {
         if (BoardUserId != principalId) {
             throw new CustomApiException(msg, HttpStatus.FORBIDDEN);
@@ -70,4 +84,5 @@ public class BoardService {
             throw new CustomException(msg);
         }
     }
+
 }
