@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import shop.mtcoding.blog4.dto.board.boardReq.SaveReqDto;
+import shop.mtcoding.blog4.dto.board.BoardReq.SaveReqDto;
 import shop.mtcoding.blog4.ex.CustomException;
 import shop.mtcoding.blog4.model.BoardRepository;
 
