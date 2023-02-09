@@ -70,4 +70,7 @@ public class BoardService {
             throw new CustomException(msg);
         }
     }
+
+    public void update() {
+    }
 }
