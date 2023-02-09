@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.mtcoding.blog4.dto.board.BoardReq.SaveReqDto;
+import shop.mtcoding.blog4.dto.board.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.blog4.dto.board.BoardResp.BoardListRespDto;
 import shop.mtcoding.blog4.ex.CustomException;
 import shop.mtcoding.blog4.model.BoardRepository;
@@ -32,4 +33,15 @@ public class BoardService {
         return boardDtoList;
     }
 
+    public BoardDetailRespDto getBoardDetail(int id) {
+        BoardDetailRespDto boardDto = boardRepository.findByIdWithUser(id);
+        checkObjectExist(boardDto, "존재하지 않는 게시물입니다.");
+        return boardDto;
+    }
+
+    private void checkObjectExist(Object object, String msg) {
+        if (object == null) {
+            throw new CustomException(msg);
+        }
+    }
 }
