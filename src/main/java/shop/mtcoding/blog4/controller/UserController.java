@@ -52,6 +52,12 @@ public class UserController {
         return "redirect:/";
     }
 
+    @GetMapping("/logout")
+    public String logout() {
+        session.invalidate();
+        return "redirect:/";
+    }
+
     private void validateString(String stringData, String msg) {
         if (stringData.isEmpty() || stringData == null) {
             throw new CustomException(msg);
