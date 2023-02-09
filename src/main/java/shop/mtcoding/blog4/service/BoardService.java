@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import shop.mtcoding.blog4.dto.board.BoardReq.SaveReqDto;
 import shop.mtcoding.blog4.dto.board.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.blog4.dto.board.BoardResp.BoardListRespDto;
+import shop.mtcoding.blog4.ex.CustomApiException;
 import shop.mtcoding.blog4.ex.CustomException;
+import shop.mtcoding.blog4.model.Board;
 import shop.mtcoding.blog4.model.BoardRepository;
 
 @Service
@@ -25,6 +27,30 @@ public class BoardService {
             boardRepository.insert(saveReqDto.getTitle(), saveReqDto.getContent(), principalId);
         } catch (Exception e) {
             throw new CustomException("글쓰기 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional
+    public void delete(int id, int principalId) {
+        Board boardPS = boardRepository.findById(id);
+        checkObjectExistApi(boardPS, "해당 게시물을 찾을 수 없습니다.");
+        checkAuthorityApi(boardPS.getUserId(), principalId, "권한이 없습니다");
+        try {
+            boardRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new CustomApiException("글쓰기 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void checkAuthorityApi(int BoardUserId, int principalId, String msg) {
+        if (BoardUserId != principalId) {
+            throw new CustomApiException(msg, HttpStatus.FORBIDDEN);
+        }
+    }
+
+    private void checkObjectExistApi(Object object, String msg) {
+        if (object == null) {
+            throw new CustomApiException(msg);
         }
     }
 
