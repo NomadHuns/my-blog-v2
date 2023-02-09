@@ -19,7 +19,6 @@ import shop.mtcoding.blog4.service.BoardService;
 public class BoardController {
     private final BoardService boardService;
     private final HttpSession session;
-
     @GetMapping({ "/", "/board", "/main" })
     public String main() {
         return "board/list";
