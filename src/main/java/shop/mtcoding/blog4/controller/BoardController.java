@@ -7,14 +7,18 @@ import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
+import shop.mtcoding.blog4.dto.ResponseDto;
 import shop.mtcoding.blog4.dto.board.BoardReq.SaveReqDto;
 import shop.mtcoding.blog4.dto.board.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.blog4.dto.board.BoardResp.BoardListRespDto;
+import shop.mtcoding.blog4.ex.CustomApiException;
 import shop.mtcoding.blog4.ex.CustomException;
 import shop.mtcoding.blog4.model.User;
 import shop.mtcoding.blog4.service.BoardService;
@@ -56,6 +60,21 @@ public class BoardController {
         validateString(saveReqDto.getContent(), "내용을 입력하세요");
         boardService.save(saveReqDto, principal.getId());
         return "redirect:/";
+    }
+
+    @DeleteMapping("/board/{id}")
+    public @ResponseBody ResponseDto<?> delete(@PathVariable("id") int id) {
+        User principal = authenticatePrincipalApi();
+        boardService.delete(id, principal.getId());
+        return new ResponseDto<>(1, "게시물 삭제 성공", null);
+    }
+
+    private User authenticatePrincipalApi() {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            throw new CustomApiException("해당 기능은 로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
+        }
+        return principal;
     }
 
     private void validateString(String stringData, String msg) {
