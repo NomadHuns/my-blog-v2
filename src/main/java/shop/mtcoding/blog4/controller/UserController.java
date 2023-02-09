@@ -35,7 +35,7 @@ public class UserController {
         validateString(joinReqDto.getPassword(), "패스워드를 입력하세요");
         validateString(joinReqDto.getEmail(), "이메일을 입력하세요");
         userService.join(joinReqDto);
-        return null;
+        return "redirect:/loginForm";
     }
 
     private void validateString(String stringData, String msg) {
