@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import lombok.RequiredArgsConstructor;
 import shop.mtcoding.blog4.dto.user.UserReq.JoinReqDto;
 import shop.mtcoding.blog4.dto.user.UserReq.LoginReqDto;
-import shop.mtcoding.blog4.ex.CustomException;
 import shop.mtcoding.blog4.model.User;
 import shop.mtcoding.blog4.service.UserService;
+import shop.mtcoding.blog4.util.Verify;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,17 +36,17 @@ public class UserController {
 
     @PostMapping("/join")
     public String join(JoinReqDto joinReqDto) {
-        validateString(joinReqDto.getUsername(), "유저네임을 입력하세요");
-        validateString(joinReqDto.getPassword(), "패스워드를 입력하세요");
-        validateString(joinReqDto.getEmail(), "이메일을 입력하세요");
+        Verify.validateString(joinReqDto.getUsername(), "유저네임을 입력하세요");
+        Verify.validateString(joinReqDto.getPassword(), "패스워드를 입력하세요");
+        Verify.validateString(joinReqDto.getEmail(), "이메일을 입력하세요");
         userService.join(joinReqDto);
         return "redirect:/loginForm";
     }
 
     @PostMapping("/login")
     public String login(LoginReqDto loginReqDto) {
-        validateString(loginReqDto.getUsername(), "유저네임을 입력하세요");
-        validateString(loginReqDto.getPassword(), "패스워드를 입력하세요");
+        Verify.validateString(loginReqDto.getUsername(), "유저네임을 입력하세요");
+        Verify.validateString(loginReqDto.getPassword(), "패스워드를 입력하세요");
         User principal = userService.login(loginReqDto);
         session.setAttribute("principal", principal);
         return "redirect:/";
@@ -58,9 +58,4 @@ public class UserController {
         return "redirect:/";
     }
 
-    private void validateString(String stringData, String msg) {
-        if (stringData.isEmpty() || stringData == null) {
-            throw new CustomException(msg);
-        }
-    }
 }
