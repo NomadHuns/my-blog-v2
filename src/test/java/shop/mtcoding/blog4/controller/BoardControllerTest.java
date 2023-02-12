@@ -1,9 +1,14 @@
 package shop.mtcoding.blog4.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import shop.mtcoding.blog4.dto.board.BoardReq.UpdateReqDto;
+import shop.mtcoding.blog4.dto.board.BoardResp.BoardDetailRespDto;
+import shop.mtcoding.blog4.dto.reply.ReplyResp.ReplyDetailRespDto;
 import shop.mtcoding.blog4.model.User;
 
 @Transactional
@@ -104,4 +111,31 @@ public class BoardControllerTest {
         System.out.println("테스트 : " + responseBody);
         resultActions.andExpect(status().isOk());
     }
+
+    @Test
+    public void detail_test() throws Exception {
+        // given
+        om = new ObjectMapper();
+        int id = 1;
+
+        // when
+        ResultActions resultActions = mvc.perform(get("/board/" + id));
+        Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
+        BoardDetailRespDto boardDtoList = (BoardDetailRespDto) map.get("board");
+        String boardModel = om.writeValueAsString(boardDtoList);
+        List<ReplyDetailRespDto> replyDtoList = (List<ReplyDetailRespDto>) map.get("replyDtoList");
+        String replyModel = om.writeValueAsString(replyDtoList);
+
+        // verify
+        System.out.println("테스트 : " + boardModel);
+        System.out.println("테스트 : " + replyModel);
+        resultActions.andExpect(status().isOk());
+        assertThat(boardDtoList.getId()).isEqualTo(1);
+        assertThat(boardDtoList.getUsername()).isEqualTo("ssar");
+        assertThat(boardDtoList.getTitle()).isEqualTo("첫번째 글입니다.");
+        assertThat(replyDtoList.get(0).getComment()).isEqualTo("댓글1");
+        assertThat(replyDtoList.get(0).getUsername()).isEqualTo("ssar");
+        assertThat(replyDtoList.get(0).getBoardId()).isEqualTo(1);
+    }
+
 }
