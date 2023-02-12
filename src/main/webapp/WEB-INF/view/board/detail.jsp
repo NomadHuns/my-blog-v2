@@ -47,10 +47,10 @@
         </div>
 
         <script>
-            function deleteBoard(id) {
+            function deleteBoard(boardId) {
                 $.ajax({
                     type: "delete",
-                    url: "/board/" + id,
+                    url: "/board/" + boardId,
                     dataType: "json",
                 })
                     .done((res) => {
@@ -60,6 +60,22 @@
                     .fail((err) => {
                         alert(err.responseJSON.msg);
                         history.back();
+                    })
+            }
+
+            function deleteReply(replyId) {
+                $.ajax({
+                    type: "delete",
+                    url: "/reply/" + replyId,
+                    dataType: "json",
+                })
+                    .done((res) => {
+                        alert(res.msg);
+                        $("#reply-" + replyId).remove();
+                        location.reload();
+                    })
+                    .fail((err) => {
+                        alert(err.responseJSON.msg);
                     })
             }
         </script>
