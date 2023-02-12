@@ -33,13 +33,15 @@
             <div class="card">
                 <div class="card-header">댓글 리스트</div>
                 <ul id="reply-box" class="list-group">
-                    <li id="reply-1" class="list-group-item d-flex justify-content-between">
-                        <div>댓글내용입니다</div>
+                <c:forEach items="${replyDtoList}" var="reply">
+                    <li id="reply-${reply.id}" class="list-group-item d-flex justify-content-between">
+                        <div>${reply.comment}</div>
                         <div class="d-flex">
-                            <div class="font-italic">작성자 : cos &nbsp;</div>
-                            <button onClick="replyDelete()" class="badge bg-danger">삭제</button>
+                            <div class="font-italic">작성자 : ${reply.username} &nbsp;</div>
+                            <button onClick="deleteReply(${reply.id})" class="badge bg-danger">삭제</button>
                         </div>
                     </li>
+                </c:forEach>
                 </ul>
             </div>
         </div>
