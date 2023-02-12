@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,8 +21,6 @@ import shop.mtcoding.blog4.dto.board.BoardReq.UpdateReqDto;
 import shop.mtcoding.blog4.dto.board.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.blog4.dto.board.BoardResp.BoardListRespDto;
 import shop.mtcoding.blog4.dto.reply.ReplyResp.ReplyDetailRespDto;
-import shop.mtcoding.blog4.ex.CustomApiException;
-import shop.mtcoding.blog4.ex.CustomException;
 import shop.mtcoding.blog4.model.User;
 import shop.mtcoding.blog4.service.BoardService;
 import shop.mtcoding.blog4.service.ReplyService;
@@ -66,7 +63,7 @@ public class BoardController {
 
     @PostMapping("/board")
     public String save(SaveReqDto saveReqDto) {
-        User principal = authenticatePrincipal();
+        User principal = Verify.authenticatePrincipal(session);
         Verify.validateString(saveReqDto.getTitle(), "제목을 입력하세요");
         Verify.validateString(saveReqDto.getContent(), "내용을 입력하세요");
         boardService.save(saveReqDto, principal.getId());
@@ -75,33 +72,18 @@ public class BoardController {
 
     @DeleteMapping("/board/{id}")
     public @ResponseBody ResponseDto<?> delete(@PathVariable("id") int id) {
-        User principal = authenticatePrincipalApi();
+        User principal = Verify.authenticatePrincipalApi(session);
         boardService.delete(id, principal.getId());
         return new ResponseDto<>(1, "게시물 삭제 성공", null);
     }
 
     @PutMapping("/board/{id}")
     public @ResponseBody ResponseDto<?> update(@PathVariable("id") int id, @RequestBody UpdateReqDto updateReqDto) {
-        User principal = authenticatePrincipal();
+        User principal = Verify.authenticatePrincipal(session);
         Verify.validateStringApi(updateReqDto.getTitle(), "제목을 입력하세요");
         Verify.validateStringApi(updateReqDto.getContent(), "내용을 입력하세요");
         boardService.update(id, principal.getId(), updateReqDto);
         return new ResponseDto<>(1, "게시물 수정 성공", null);
     }
 
-    private User authenticatePrincipalApi() {
-        User principal = (User) session.getAttribute("principal");
-        if (principal == null) {
-            throw new CustomApiException("해당 기능은 로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
-        }
-        return principal;
-    }
-
-    private User authenticatePrincipal() {
-        User principal = (User) session.getAttribute("principal");
-        if (principal == null) {
-            throw new CustomException("해당 기능은 로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
-        }
-        return principal;
-    }
 }
