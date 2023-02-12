@@ -1,8 +1,8 @@
 insert into user_tb(username, password, email, created_at) values('ssar', '1234', 'ssar@nate.com', now());
 insert into user_tb(username, password, email, created_at) values('cos', '1234', 'cos@nate.com', now());
 
-insert into board_tb(title, content, thumbnail, user_id, created_at) values('두번째 글입니다.', '두번째 내용입니다', '/images/newjeans.jpg', 1, now());
 insert into board_tb(title, content, thumbnail, user_id, created_at) values('첫번째 글입니다.', '첫번째 내용입니다', '/images/newjeans.jpg', 1, now());
+insert into board_tb(title, content, thumbnail, user_id, created_at) values('두번째 글입니다.', '두번째 내용입니다', '/images/newjeans.jpg', 1, now());
 insert into board_tb(title, content, thumbnail, user_id, created_at) values('세번째 글입니다.', '세번째 내용입니다', '/images/newjeans.jpg', 1, now());
 insert into board_tb(title, content, thumbnail, user_id, created_at) values('네번째 글입니다.', '네번째 내용입니다', '/images/newjeans.jpg', 1, now());
 insert into board_tb(title, content, thumbnail, user_id, created_at) values('다섯번째 글입니다.', '다섯번째 내용입니다', '/images/newjeans.jpg', 1, now());
@@ -13,10 +13,10 @@ insert into board_tb(title, content, thumbnail, user_id, created_at) values('아
 insert into board_tb(title, content, thumbnail, user_id, created_at) values('열번째 글입니다.', '열번째 내용입니다', '/images/newjeans.jpg', 2, now());
 
 insert into reply_tb(comment, board_id, user_id, created_at) values('댓글1', 1, 1, now());
-insert into reply_tb(comment, board_id, user_id, created_at) values('댓글1', 1, 2, now());
-insert into reply_tb(comment, board_id, user_id, created_at) values('댓글1', 2, 1, now());
-insert into reply_tb(comment, board_id, user_id, created_at) values('댓글1', 2, 2, now());
-insert into reply_tb(comment, board_id, user_id, created_at) values('댓글1', 1, 3, now());
-insert into reply_tb(comment, board_id, user_id, created_at) values('댓글1', 2, 3, now());
+insert into reply_tb(comment, board_id, user_id, created_at) values('댓글2', 1, 2, now());
+insert into reply_tb(comment, board_id, user_id, created_at) values('댓글3', 2, 1, now());
+insert into reply_tb(comment, board_id, user_id, created_at) values('댓글4', 2, 2, now());
+insert into reply_tb(comment, board_id, user_id, created_at) values('댓글5', 1, 3, now());
+insert into reply_tb(comment, board_id, user_id, created_at) values('댓글6', 2, 3, now());
 
 commit; 

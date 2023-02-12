@@ -21,16 +21,19 @@ import shop.mtcoding.blog4.dto.board.BoardReq.SaveReqDto;
 import shop.mtcoding.blog4.dto.board.BoardReq.UpdateReqDto;
 import shop.mtcoding.blog4.dto.board.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.blog4.dto.board.BoardResp.BoardListRespDto;
+import shop.mtcoding.blog4.dto.reply.ReplyResp.ReplyDetailRespDto;
 import shop.mtcoding.blog4.ex.CustomApiException;
 import shop.mtcoding.blog4.ex.CustomException;
 import shop.mtcoding.blog4.model.User;
 import shop.mtcoding.blog4.service.BoardService;
+import shop.mtcoding.blog4.service.ReplyService;
 import shop.mtcoding.blog4.util.Verify;
 
 @Controller
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
+    private final ReplyService replyService;
     private final HttpSession session;
 
     @GetMapping({ "/", "/board", "/main" })
@@ -44,6 +47,8 @@ public class BoardController {
     public String detail(@PathVariable("id") int id, Model model) {
         BoardDetailRespDto board = boardService.getBoardDetail(id);
         model.addAttribute("board", board);
+        List<ReplyDetailRespDto> replyDtoList = replyService.getReplyList(board.getId());
+        model.addAttribute("replyDtoList", replyDtoList);
         return "board/detail";
     }
 
