@@ -20,12 +20,12 @@
             <hr />
 
             <div class="card">
-                <form>
+                <form action="/board/${board.id}/reply" method="post">
                     <div class="card-body">
-                        <textarea id="reply-content" class="form-control" rows="1"></textarea>
+                        <textarea name="comment" id="reply-comment" class="form-control" rows="1"></textarea>
                     </div>
                     <div class="card-footer">
-                        <button type="button" id="btn-reply-save" class="btn btn-primary">등록</button>
+                        <button type="submit" id="btn-reply-save" class="btn btn-primary">등록</button>
                     </div>
                 </form>
             </div>
@@ -33,15 +33,15 @@
             <div class="card">
                 <div class="card-header">댓글 리스트</div>
                 <ul id="reply-box" class="list-group">
-                <c:forEach items="${replyDtoList}" var="reply">
-                    <li id="reply-${reply.id}" class="list-group-item d-flex justify-content-between">
-                        <div>${reply.comment}</div>
-                        <div class="d-flex">
-                            <div class="font-italic">작성자 : ${reply.username} &nbsp;</div>
-                            <button onClick="deleteReply(${reply.id})" class="badge bg-danger">삭제</button>
-                        </div>
-                    </li>
-                </c:forEach>
+                    <c:forEach items="${replyDtoList}" var="reply">
+                        <li id="reply-${reply.id}" class="list-group-item d-flex justify-content-between">
+                            <div>${reply.comment}</div>
+                            <div class="d-flex">
+                                <div class="font-italic">작성자 : ${reply.username} &nbsp;</div>
+                                <button onClick="deleteReply(${reply.id})" class="badge bg-danger">삭제</button>
+                            </div>
+                        </li>
+                    </c:forEach>
                 </ul>
             </div>
         </div>
