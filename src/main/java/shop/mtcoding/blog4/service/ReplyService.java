@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.mtcoding.blog4.dto.reply.ReplyResp.ReplyDetailRespDto;
@@ -17,6 +18,7 @@ import shop.mtcoding.blog4.util.Verify;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ReplyService {
     private final ReplyRepository replyRepository;
     private final BoardRepository boardRepository;
@@ -26,6 +28,7 @@ public class ReplyService {
         return dtoList;
     }
 
+    @Transactional
     public void save(String comment, Integer boardId, Integer userId) {
         Board boardPS = boardRepository.findById(boardId);
         Verify.checkObjectExist(boardPS, "존재하지 않는 게시물입니다");
@@ -36,6 +39,7 @@ public class ReplyService {
         }
     }
 
+    @Transactional
     public void delete(Integer replyId, Integer principalId) {
         Reply reply = replyRepository.findById(replyId);
         Verify.checkObjectExistApi(reply, "존재하지 않는 댓글입니다");

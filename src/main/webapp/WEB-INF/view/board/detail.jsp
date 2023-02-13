@@ -8,7 +8,7 @@
 
             <div class="mb-2">
                 글 번호 : <span id="id"><i>${board.id} </i></span> 작성자 : <span><i>${board.username} </i></span>
-            </div>
+            </div>  
 
             <div>
                 <h3>${board.title}</h3>
@@ -38,7 +38,16 @@
                             <div>${reply.comment}</div>
                             <div class="d-flex">
                                 <div class="font-italic">작성자 : ${reply.username} &nbsp;</div>
-                                <button onClick="deleteReply(${reply.id})" class="badge bg-danger">삭제</button>
+                                <c:choose>
+                                    <c:when test="${principal.id==reply.userId}">
+                                        <button onClick="deleteByReplyId(${reply.id})"
+                                            class="badge bg-danger">삭제</button>
+                                    </c:when>
+
+                                    <c:otherwise>
+                                        <button style="visibility: hidden;">삭제</button>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </li>
                     </c:forEach>
@@ -72,7 +81,6 @@
                     .done((res) => {
                         alert(res.msg);
                         $("#reply-" + replyId).remove();
-                        location.reload();
                     })
                     .fail((err) => {
                         alert(err.responseJSON.msg);
